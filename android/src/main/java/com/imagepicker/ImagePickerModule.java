@@ -204,12 +204,17 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
 
   public void launchCamera()
   {
-    this.launchCamera(this.options, this.callback);
+    this.launchCameraInternal(this.options, this.callback);
   }
 
   // NOTE: Currently not reentrant / doesn't support concurrent requests
   @ReactMethod
-  public void launchCamera(final ReadableMap options, final Callback callback)
+  public void launchCamera(final ReadableMap options, final Callback callback) {
+    imageConfig = new ImageConfig(null, null, 0, 0, 100, 0, false);
+    this.launchCameraInternal(options, callback);
+  }
+
+  public void launchCameraInternal(final ReadableMap options, final Callback callback)
   {
     if (!isCameraAvailable())
     {
