@@ -86,7 +86,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
-            Log.i("MYDEBUG", "create file - " + e.getMessage());
+            Log.w("ImagePicker", "create file - " + e.getMessage());
             e.printStackTrace();
             result = null;
         }
@@ -176,7 +176,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
-            Log.i("MYDEBUG", "Exif stuff - " + e.getMessage());
+            Log.w("ImagePicker", "Exif stuff error message - " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -210,7 +210,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
-            Log.i("MYDEBUG", "fileoutput stream - " + e.getMessage());
+            Log.i("ImagePicker", "fileoutput stream error message - " + e.getMessage());
             e.printStackTrace();
         }
 
