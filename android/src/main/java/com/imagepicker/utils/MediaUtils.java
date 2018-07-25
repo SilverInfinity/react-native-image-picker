@@ -34,17 +34,39 @@ import static com.imagepicker.ImagePickerModule.REQUEST_LAUNCH_IMAGE_CAPTURE;
 /**
  * Created by rusfearuth on 15.03.17.
  */
-
 public class MediaUtils
 {
-    public static @Nullable File createNewFile(@NonNull final Context reactContext,
-                                               @NonNull final ReadableMap options,
-                                               @NonNull final boolean forceLocal)
+    public static @Nullable File createNewFile( @NonNull final Context reactContext,
+                                                @NonNull final ReadableMap options,
+                                                @NonNull final boolean forceLocal)
     {
         final String filename = new StringBuilder("image-")
-                .append(UUID.randomUUID().toString())
-                .append(".jpg")
-                .toString();
+            .append(UUID.randomUUID().toString())
+            .append(".jpg")
+            .toString();
+        return createNewFileWithFilename(reactContext, options, forceLocal, filename);
+    }
+    
+    public static @Nullable File createNewFile(@NonNull final Context reactContext,
+                                               @NonNull final ReadableMap options,
+                                               @NonNull final boolean forceLocal,
+                                               @NonNull final ImageConfig imageConfig)
+    {
+        try {
+            final String newFileName = new StringBuilder("resized-").append(imageConfig.original.getName()).toString();
+            return createNewFileWithFilename(reactContext, options, forceLocal, newFileName);
+        } catch (Exception e) {
+            Log.w("ImagePicker", "createing resize file failed, falling back to random filename. message - " + e.getMessage());
+            return createNewFile(reactContext, options, forceLocal);
+        }
+    }
+
+    public static @Nullable File createNewFileWithFilename( @NonNull final Context reactContext,
+                                                            @NonNull final ReadableMap options,
+                                                            @NonNull final boolean forceLocal,
+                                                            @NonNull final String filename)
+    {
+        
 
         // final File path = ReadableMapUtils.hasAndNotNullReadableMap(options, "storageOptions") && !forceLocal
         //         ? Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
@@ -64,6 +86,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
+            Log.i("MYDEBUG", "create file - " + e.getMessage());
             e.printStackTrace();
             result = null;
         }
@@ -153,6 +176,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
+            Log.i("MYDEBUG", "Exif stuff - " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -161,7 +185,7 @@ public class MediaUtils
         scaledPhoto.compress(Bitmap.CompressFormat.JPEG, result.quality, bytes);
 
         final boolean forceLocal = requestCode == REQUEST_LAUNCH_IMAGE_CAPTURE;
-        final File resized = createNewFile(context, options, !forceLocal);
+        final File resized = createNewFile(context, options, !forceLocal, imageConfig);
 
         if (resized == null)
         {
@@ -186,6 +210,7 @@ public class MediaUtils
         }
         catch (IOException e)
         {
+            Log.i("MYDEBUG", "fileoutput stream - " + e.getMessage());
             e.printStackTrace();
         }
 
