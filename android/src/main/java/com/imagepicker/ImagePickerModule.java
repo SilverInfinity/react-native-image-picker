@@ -603,9 +603,9 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
       else
       {
         String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-        if (activity instanceof ReactActivity)
+        if (activity instanceof PermissionAwareActivity)
         {
-          ((ReactActivity) activity).requestPermissions(PERMISSIONS, requestCode, listener);
+          ((PermissionAwareActivity) activity).requestPermissions(PERMISSIONS, requestCode, listener);
         }
         else if (activity instanceof PermissionAwareActivity) {
           ((PermissionAwareActivity) activity).requestPermissions(PERMISSIONS, requestCode, listener);
